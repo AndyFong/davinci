@@ -1,3 +1,5 @@
+@import "~assets/less/variable";
+
 .tableInput {
   // width: calc(~"100% - 32px");
   width: 80px; // @FIXME auto size according to tree node depth
@@ -17,4 +19,39 @@
 .headerTable {
   max-height: 600px;
   overflow-y: auto;
+}
+
+.headerCollection {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+
+  ul {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+    flex: 1;
+
+    ul :last-child {
+      border-right: none;
+    }
+  }
+
+  li {
+    border: 1px solid @border-color-base;
+    display: flex;
+    flex-direction: column;
+    margin-left: -1px;
+    margin-bottom: -1px;
+
+    span {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+  }
 }

@@ -1,12 +1,8 @@
+import { IFontSetting } from 'components/StyleSetting/Font'
 import { ITableHeaderConfig } from './Header/types'
 import { ITableColumnConfig } from './Column/types'
 
-export interface ITableCellStyle {
-  fontSize: string
-  fontFamily: string
-  fontWeight: string
-  fontColor: string
-  fontStyle: 'normal' | 'oblique'
+export interface ITableCellStyle extends IFontSetting {
   backgroundColor: string
   justifyContent: 'flex-start' | 'center' | 'flex-end'
   inflexible: boolean

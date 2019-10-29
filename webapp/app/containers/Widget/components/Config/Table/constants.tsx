@@ -42,3 +42,12 @@ export const DefaultTableCellStyle: ITableCellStyle = {
   inflexible: false,
   width: DEFAULT_TABLE_FIXED_WIDTH
 }
+
+export function textAlignAdapter (justifyContent: ITableCellStyle['justifyContent']) {
+  switch (justifyContent) {
+    case 'flex-start': return 'left'
+    case 'center':  return 'center'
+    case 'flex-end': return 'right'
+    default: return 'inherit'
+  }
+}

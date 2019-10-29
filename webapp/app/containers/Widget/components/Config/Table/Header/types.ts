@@ -1,12 +1,16 @@
 import { ViewModelVisualTypes } from 'containers/View/constants'
 import { ITableCellStyle } from '../types'
 
-export interface ITableHeaderConfig {
+export interface ITableHeaderConfigBase {
   key: string
   headerName: string
-  alias: string
-  visualType: ViewModelVisualTypes
   isGroup: boolean
   style: ITableCellStyle
+  children: ITableHeaderConfigBase[]
+}
+
+export interface ITableHeaderConfig extends ITableHeaderConfigBase {
+  alias: string
+  visualType: ViewModelVisualTypes
   children: ITableHeaderConfig[]
 }

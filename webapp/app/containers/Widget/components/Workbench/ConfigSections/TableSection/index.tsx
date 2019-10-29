@@ -19,6 +19,8 @@ const RadioButton = Radio.Button
 const HeaderConfigModal = React.lazy(() => import('containers/Widget/components/Config/Table/Header/HeaderConfigModal'))
 const ColumnConfigModal = React.lazy(() => import('containers/Widget/components/Config/Table/Column/ColumnConfigModal'))
 
+import TableConfigDrawer from 'containers/Widget/components/Config/Table/TableConfigDrawer'
+
 const styles = require('../../Workbench.less')
 
 interface ITableSectionProps {
@@ -425,13 +427,18 @@ export class TableSection extends React.PureComponent<ITableSectionProps, ITable
             </Row>
           </div>
         </div>
+        <TableConfigDrawer
+          visible={headerConfigModalVisible}
+          config={validHeaderConfig}
+          onClose={this.closeHeaderConfig}
+        />
         <React.Suspense fallback={null}>
-          <HeaderConfigModal
+          {/* <HeaderConfigModal
             visible={headerConfigModalVisible}
             config={validHeaderConfig}
             onCancel={this.closeHeaderConfig}
             onSave={this.saveHeaderConfig}
-          />
+          /> */}
           <ColumnConfigModal
             visible={columnConfigModalVisible}
             config={validColumnConfig}

@@ -12,9 +12,11 @@ const styles = require('./ColorPicker.less')
 const defaultTheme = require('assets/json/echartsThemes/default.project.json')
 const defaultThemeColors = defaultTheme.theme.color
 
+export type ColorPickerSizes = 'default' | 'small' | 'large'
+
 interface IColorPickerProps {
   value?: string | [number, number, number, number]
-  size?: 'default' | 'small' | 'large'
+  size?: ColorPickerSizes
   preset?: boolean
   disableAlpha?: boolean
   rawValue?: boolean
