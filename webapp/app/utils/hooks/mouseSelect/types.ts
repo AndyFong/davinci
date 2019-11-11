@@ -1,3 +1,4 @@
+
 /*
  * <<
  * Davinci
@@ -18,6 +19,6 @@
  * >>
  */
 
-export { default as useTablePagination } from './tablePagination'
-export { default as useClientRect } from './clientRect'
-export * from './mouseSelect'
+export type MousePoint = { x: number; y: number }
+
+export type BoxRect = { left: number; top: number; width: number; height: number }

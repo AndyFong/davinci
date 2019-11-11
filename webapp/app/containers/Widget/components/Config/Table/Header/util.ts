@@ -22,6 +22,6 @@ import React from 'react'
 
 export const HeaderSelectedContext = React.createContext<{
   selectedKeys: string[]
-  selectedKeysChange: (key: string, selected: boolean) => void
+  selectedKeysChange: (key: string, selected: boolean, exclude?: boolean) => void
   openConfig: () => void
 }>(null)

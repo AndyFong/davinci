@@ -18,10 +18,11 @@
  * >>
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useContext } from 'react'
 import { ITableHeaderConfig } from './types'
 
 import { HeaderSelectedContext } from './util'
+import { useMouseSelectChild } from 'utils/hooks'
 
 interface IHeaderItemProps {
   config: ITableHeaderConfig
@@ -46,44 +47,54 @@ const HeaderItem: React.FC<IHeaderItemProps> = (props) => {
     fontSize: `${fontSize}px`,
     fontStyle,
     fontWeight: fontWeight as React.CSSProperties['fontWeight'],
-    backgroundColor
+    backgroundColor,
+    justifyContent
   }
 
+  const onHeaderItemClick = (e: React.MouseEvent) => {
+    // if (e.)
+  }
+
+  const { selectedKeys, selectedKeysChange } = useContext(HeaderSelectedContext)
+  const selected = selectedKeys.includes(key)
+  const itemStyle: React.CSSProperties = {}
+  if (selected) {
+    cellCssStyle.opacity = 0.5
+    itemStyle.borderWidth = 2
+    itemStyle.borderStyle = 'dashed'
+  }
+
+  const itemRef = React.useRef<HTMLSpanElement>()
+  const [isBoxIntersected] = useMouseSelectChild(itemRef.current, selected)
+  useEffect(
+    () => {
+      if (isBoxIntersected) {
+        selectedKeysChange(key, true)
+      }
+    },
+    [isBoxIntersected]
+  )
+
   return (
-    <HeaderSelectedContext.Consumer>
-      {({ selectedKeys, selectedKeysChange }) => {
-        const selected = selectedKeys.includes(key)
-        const itemStyle: React.CSSProperties = {}
-        if (selected) {
-          cellCssStyle.opacity = 0.5
-          itemStyle.borderWidth = 2
-          itemStyle.borderStyle = 'dashed'
-        }
-        return (
-          <li style={itemStyle}>
-            <span
-              onClick={() => {
-                selectedKeysChange(key, !selected)
-              }}
-              style={cellCssStyle}
-            >
-              {alias || headerName}
-            </span>
-            {Array.isArray(children) &&
-              children.length && (
-                <ul>
-                  {children.map((child) => (
-                    <HeaderItem
-                      key={child.key}
-                      config={child}
-                    />
-                  ))}
-                </ul>
-              )}
-          </li>
-        )
-      }}
-    </HeaderSelectedContext.Consumer>
+    <li style={itemStyle}>
+      <span
+        ref={itemRef}
+        onClick={(e) => {
+          selectedKeysChange(key, !selected, !(e.ctrlKey || e.altKey || e.metaKey))
+        }}
+        style={cellCssStyle}
+      >
+        {headerName}
+      </span>
+      {Array.isArray(children) &&
+        children.length && (
+          <ul>
+            {children.map((child) => (
+              <HeaderItem key={child.key} config={child} />
+            ))}
+          </ul>
+        )}
+    </li>
   )
 }
 

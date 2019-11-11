@@ -19,6 +19,7 @@
  */
 
 import React, { useState, useCallback } from 'react'
+import produce from 'immer'
 import { Dropdown, Menu } from 'antd'
 const MenuItem = Menu.Item
 import HeaderItem from './HeaderItem'
@@ -29,10 +30,13 @@ import { HeaderSelectedContext } from './util'
 
 import Styles from './styles.less'
 import { ITableCellStyle } from '../types'
-import { traverseConfig } from '../../../Chart/Table/util'
+import { traverseConfig } from 'containers/Widget/components/Chart/Table/util'
+
+import { useMouseSelect, MouseSelectProvider } from 'utils/hooks'
 
 interface IHeaderCollectionProps {
   config: ITableHeaderConfig[]
+  onChange: (config: ITableHeaderConfig[]) => void
 }
 
 const HeaderCollectionMenu = (
@@ -46,13 +50,18 @@ const HeaderCollectionMenu = (
 )
 
 const HeaderCollection: React.FC<IHeaderCollectionProps> = (props) => {
-  const { config } = props
+  const { config, onChange } = props
   const [selectedKeys, setSelectedKeys] = useState([])
   const selectedKeysChange = useCallback(
-    (key: string, selected: boolean) => {
-      const newSelectedKeys = selected
-        ? selectedKeys.concat(key)
-        : selectedKeys.filter((k) => k !== key)
+    (key: string, selected: boolean, exclude: boolean) => {
+      let newSelectedKeys: string[]
+      if (exclude) {
+        newSelectedKeys = selected ? [key] : []
+      } else {
+        newSelectedKeys = selected
+          ? selectedKeys.concat(key)
+          : selectedKeys.filter((k) => k !== key)
+      }
       setSelectedKeys(newSelectedKeys)
     },
     [selectedKeys, setSelectedKeys]
@@ -61,8 +70,24 @@ const HeaderCollection: React.FC<IHeaderCollectionProps> = (props) => {
   const [modalVisible, setModalVisible] = useState(false)
 
   const saveHeaderStyle = (style: ITableCellStyle) => {
-    traverseConfig
+    const newConfig = produce(config, (draft) => {
+      traverseConfig(draft, 'children', (currentConfig) => {
+        if (selectedKeys.includes(currentConfig.key)) {
+          currentConfig.style = style
+        }
+      })
+    })
+    onChange(newConfig)
   }
+
+  const collectionRef = React.useRef<HTMLUListElement>()
+  const [selectionBorder, selectionBox] = useMouseSelect(
+    true,
+    collectionRef.current,
+    (keys: string[]) => {
+      setSelectedKeys(keys)
+    }
+  )
 
   return (
     <div className={Styles.headerCollection}>
@@ -73,13 +98,16 @@ const HeaderCollection: React.FC<IHeaderCollectionProps> = (props) => {
           openConfig: () => setModalVisible(true)
         }}
       >
-        <Dropdown overlay={HeaderCollectionMenu} trigger={['contextMenu']}>
-          <ul>
-            {config.map((cfg) => (
-              <HeaderItem key={cfg.key} config={cfg} />
-            ))}
-          </ul>
-        </Dropdown>
+        <MouseSelectProvider selection={selectionBox}>
+          <Dropdown overlay={HeaderCollectionMenu} trigger={['contextMenu']}>
+            <ul ref={collectionRef}>
+              {config.map((cfg) => (
+                <HeaderItem key={cfg.key} config={cfg} />
+              ))}
+              {selectionBorder}
+            </ul>
+          </Dropdown>
+        </MouseSelectProvider>
         <HeaderStyleModal
           visible={modalVisible}
           onSave={saveHeaderStyle}

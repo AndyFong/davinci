@@ -430,6 +430,7 @@ export class TableSection extends React.PureComponent<ITableSectionProps, ITable
         <TableConfigDrawer
           visible={headerConfigModalVisible}
           config={validHeaderConfig}
+          onSave={this.saveHeaderConfig}
           onClose={this.closeHeaderConfig}
         />
         <React.Suspense fallback={null}>

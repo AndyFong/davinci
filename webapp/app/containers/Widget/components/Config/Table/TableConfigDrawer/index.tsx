@@ -28,11 +28,12 @@ import Styles from './TableConfigDrawer.less'
 interface ITableConfigDrawerProps {
   visible: boolean
   config: ITableHeaderConfig[]
+  onSave: (config: ITableHeaderConfig[]) => void
   onClose: () => void
 }
 
 const TableConfigDrawer: React.FC<ITableConfigDrawerProps> = (props) => {
-  const { visible, config, onClose } = props
+  const { visible, config, onClose, onSave } = props
   return (
     <Drawer
       title="表格样式设置"
@@ -40,7 +41,7 @@ const TableConfigDrawer: React.FC<ITableConfigDrawerProps> = (props) => {
       visible={visible}
       onClose={onClose}
     >
-      <HeaderCollection config={config} />
+      <HeaderCollection config={config} onChange={onSave} />
     </Drawer>
   )
 }

@@ -18,6 +18,21 @@
  * >>
  */
 
-export { default as useTablePagination } from './tablePagination'
-export { default as useClientRect } from './clientRect'
-export * from './mouseSelect'
+import React from 'react'
+
+export { default as useMouseSelect } from './mouseSelect'
+export { default as useMouseSelectChild } from './mouseSelectChild'
+
+import { BoxRect } from './types'
+import { MouseSelectContext } from './util'
+
+type MouseSelectProviderProps = {
+  selection: BoxRect
+}
+export const MouseSelectProvider: React.FC<MouseSelectProviderProps> = (
+  props
+) => (
+  <MouseSelectContext.Provider value={{ selectionBox: props.selection }}>
+    {props.children}
+  </MouseSelectContext.Provider>
+)

@@ -38,6 +38,12 @@
     }
   }
 
+  & > ul {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 16px;
+  }
+
   li {
     border: 1px solid @border-color-base;
     display: flex;
@@ -50,6 +56,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
+      white-space: nowrap;
       padding: 8px;
       box-sizing: border-box;
     }
