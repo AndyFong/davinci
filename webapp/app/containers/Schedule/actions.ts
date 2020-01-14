@@ -187,16 +187,6 @@ export const ScheduleActions = {
       type: ActionTypes.LOAD_SUGGEST_MAILS_FAILURE,
       payload: {}
     }
-  },
-
-  portalDashboardsLoaded(portalId: number, dashboards: any[]) {
-    return {
-      type: ActionTypes.LOAD_PORTAL_DASHBOARDS_SUCCESS,
-      payload: {
-        portalId,
-        dashboards
-      }
-    }
   }
 }
 

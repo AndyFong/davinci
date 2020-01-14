@@ -128,28 +128,22 @@ export const getTextWidth = (
   return Math.ceil(metrics.width)
 }
 
-/**
- * View 组件
- */
-export function generateData (sourceData) {
-  const tableArr = []
-  if (sourceData.length) {
-    sourceData.forEach((i) => {
-      const children = []
-      if (i.columns && i.columns.length) {
-        i.columns.forEach((j) => {
-          children.push({
-            title: j.name,
-            key: j.name
-          })
-        })
-      }
-      tableArr.push({
-        title: i.tableName,
-        key: i.tableName,
-        children
-      })
-    })
+export function traverseTree<T> (
+  treeNodes: T[],
+  childrenName: keyof T,
+  callback: (currentTreeNode: T, idx: number, siblings: T[]) => any
+) {
+  if (!Array.isArray(treeNodes)) {
+    return
   }
-  return tableArr
+
+  treeNodes.forEach((node, idx) => {
+    if (Array.isArray(node[childrenName])) {
+      const children = node[childrenName as string] as T[]
+      if (children.length) {
+        traverseTree(children, childrenName, callback)
+      }
+    }
+    callback(node, idx, treeNodes)
+  })
 }

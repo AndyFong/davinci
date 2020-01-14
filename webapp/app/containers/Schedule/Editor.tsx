@@ -30,10 +30,13 @@ import { createStructuredSelector } from 'reselect'
 import {
   makeSelectLoading,
   makeSelectEditingSchedule,
-  makeSelectSuggestMails,
-  makeSelectPortalDashboards
+  makeSelectSuggestMails
 } from './selectors'
-import { makeSelectPortals, makeSelectDisplays } from 'containers/Viz/selectors'
+import {
+  makeSelectPortals,
+  makeSelectPortalDashboards,
+  makeSelectDisplays
+} from 'containers/Viz/selectors'
 import { checkNameUniqueAction } from 'containers/App/actions'
 import { ScheduleActions } from './actions'
 import { hideNavigator } from 'containers/App/actions'
@@ -165,9 +168,7 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = (props) => {
           onLoadDashboards(id)
         }
       })
-    },
-    [portals, editingSchedule]
-  )
+  }, [portals, editingSchedule])
 
   const {
     displays,
@@ -309,11 +310,7 @@ const mapDispatchToProps = (dispatch) => ({
   onLoadDisplays: (projectId) => dispatch(VizActions.loadDisplays(projectId)),
   onLoadPortals: (projectId) => dispatch(VizActions.loadPortals(projectId)),
   onLoadDashboards: (portalId) =>
-    dispatch(
-      VizActions.loadPortalDashboards(portalId, (dashboards) => {
-        dispatch(ScheduleActions.portalDashboardsLoaded(portalId, dashboards))
-      }, false)
-    ),
+    dispatch(VizActions.loadPortalDashboards(portalId, null)),
   onLoadScheduleDetail: (scheduleId) =>
     dispatch(ScheduleActions.loadScheduleDetail(scheduleId)),
   onAddSchedule: (schedule, resolve) =>

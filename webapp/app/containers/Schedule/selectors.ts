@@ -53,11 +53,6 @@ const makeSelectSuggestMails = () => createSelector(
   (scheduleState) => scheduleState.suggestMails
 )
 
-const makeSelectPortalDashboards = () => createSelector(
-  selectSchedule,
-  (scheduleState) => scheduleState.portalDashboards
-)
-
 const makeSelectVizs = () => createSelector(
   selectSchedule,
   (scheduleState) => scheduleState.vizs
@@ -69,6 +64,5 @@ export {
   makeSelectEditingSchedule,
   makeSelectLoading,
   makeSelectSuggestMails,
-  makeSelectPortalDashboards,
   makeSelectVizs
 }

@@ -31,8 +31,7 @@ const initialState = {
     edit: false
   },
   suggestMails: [],
-  vizs: false,
-  portalDashboards: {} // @TODO refactor to viz reducer
+  vizs: false
 }
 
 const scheduleReducer = (state = initialState, action: ScheduleActionType) =>
@@ -108,9 +107,6 @@ const scheduleReducer = (state = initialState, action: ScheduleActionType) =>
         break
       case ActionTypes.LOAD_SUGGEST_MAILS_FAILURE:
         draft.suggestMails = []
-        break
-      case ActionTypes.LOAD_PORTAL_DASHBOARDS_SUCCESS:
-        draft.portalDashboards[action.payload.portalId] = action.payload.dashboards
         break
       // @FIXME
       case ActionTypes.LOAD_VIZS_SUCCESS:
