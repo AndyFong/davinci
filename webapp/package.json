@@ -56,7 +56,10 @@
   "pre-commit": "lint:staged",
   "resolutions": {
     "babel-core": "7.0.0-bridge.0",
-    "antd/moment": "2.23.0"
+    "antd/moment": "2.24.0"
+  },
+  "peerDependencies": {
+    "moment": "2.24.0"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
@@ -85,7 +88,6 @@
     "lodash": "4.17.13",
     "memoize-one": "^5.0.0",
     "minimist": "1.2.3",
-    "moment": "2.23.0",
     "prop-types": "15.6.2",
     "quill-image-resize-module": "^3.0.0",
     "react": "16.8.6",
