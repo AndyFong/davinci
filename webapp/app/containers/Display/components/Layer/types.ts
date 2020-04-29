@@ -19,7 +19,7 @@
  */
 
 import { IWidgetFormed } from 'containers/Widget/types'
-import { IViewModel } from 'app/containers/View/types'
+import { IFormedView } from 'app/containers/View/types'
 import { RenderType } from 'app/containers/Widget/components/Widget'
 import { IQueryConditions } from 'app/containers/Dashboard/types'
 import { ILayerFormed } from '../types'
@@ -54,7 +54,7 @@ export type ResizableChildrenProps = {
 export type LayerListContextValue = {
   currentDisplayWidgets: { [widgetId: number]: IWidgetFormed }
   editWidget?: (widgetId: number) => void
-  getWidgetViewModel: (viewId: number, widgetId: number) => IViewModel
+  getWidgetView: (viewId: number, widgetId: number) => Pick<IFormedView, 'model' | 'variable'>
   getChartData: (
     renderType: RenderType,
     slideId: number,

@@ -24,7 +24,7 @@ import { LayerListContextValue, LayerContextValue } from './types'
 export const LayerListContext = React.createContext<LayerListContextValue>({
   currentDisplayWidgets: {},
   editWidget: () => {},
-  getWidgetViewModel: () => null,
+  getWidgetView: () => null,
   getChartData: () => {},
   onDrag: () => {},
   onResize: () => {},

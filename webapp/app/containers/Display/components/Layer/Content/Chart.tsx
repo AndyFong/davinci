@@ -26,11 +26,9 @@ import { SlideContext } from 'containers/Display/components/Container'
 
 const Chart: React.FC = () => {
   const { slideId } = useContext(SlideContext)
-  const {
-    currentDisplayWidgets,
-    getWidgetViewModel,
-    getChartData
-  } = useContext(LayerListContext)
+  const { currentDisplayWidgets, getWidgetView, getChartData } = useContext(
+    LayerListContext
+  )
   const {
     layer: {
       id: layerId,
@@ -78,17 +76,10 @@ const Chart: React.FC = () => {
 
   useEffect(() => {
     if (renderType === 'rerender') {
-      getChartData(
-        'clear',
-        slideId,
-        layerId,
-        widget,
-        queryConditions,
-        {
-          pagination,
-          nativeQuery
-        }
-      )
+      getChartData('clear', slideId, layerId, widget, queryConditions, {
+        pagination,
+        nativeQuery
+      })
     }
   }, [])
 
@@ -96,17 +87,10 @@ const Chart: React.FC = () => {
     let timer: number
     if (!operationInfo && polling === 'true' && +frequency > 0) {
       timer = window.setInterval(() => {
-        getChartData(
-          'refresh',
-          slideId,
-          layerId,
-          widget,
-          queryConditions,
-          {
-            pagination,
-            nativeQuery
-          }
-        )
+        getChartData('refresh', slideId, layerId, widget, queryConditions, {
+          pagination,
+          nativeQuery
+        })
       }, +frequency * 1000)
     }
     return () => {
@@ -134,18 +118,11 @@ const Chart: React.FC = () => {
         pageNo,
         pageSize
       }
-      getChartData(
-        'clear',
-        slideId,
-        layerId,
-        widget,
-        queryConditions,
-        {
-          pagination: newPagination,
-          nativeQuery,
-          orders
-        }
-      )
+      getChartData('clear', slideId, layerId, widget, queryConditions, {
+        pagination: newPagination,
+        nativeQuery,
+        orders
+      })
     },
     [
       slideId,
@@ -158,6 +135,22 @@ const Chart: React.FC = () => {
     ]
   )
 
+  const { model: viewModel, variable: viewVariable } = getWidgetView(
+    widget.viewId,
+    widgetId
+  )
+
+  const defaultQueryVariable = useMemo(
+    () =>
+      Array.isArray(viewVariable)
+        ? viewVariable.reduce((obj, { defaultValues, name }) => {
+            obj[`$${name}$`] = defaultValues.join()
+            return obj
+          }, {})
+        : {},
+    [viewVariable]
+  )
+
   return (
     <Widget
       {...widget.config}
@@ -165,7 +158,8 @@ const Chart: React.FC = () => {
       loading={loading}
       pagination={pagination}
       renderType={renderType}
-      model={getWidgetViewModel(widget.viewId, widgetId)}
+      model={viewModel}
+      queryVariables={defaultQueryVariable}
       onPaginationChange={paginationChange}
     />
   )

@@ -63,9 +63,9 @@ const DisplayPreview: React.FC<IDisplayPreviewProps> = (props) => {
   const layerListContextValue = useMemo<LayerListContextValue>(
     () => ({
       currentDisplayWidgets,
-      getWidgetViewModel: (viewId: number) => {
-        const viewModel = formedViews[viewId].model
-        return viewModel
+      getWidgetView: (viewId: number) => {
+        const view = formedViews[viewId]
+        return view
       },
       getChartData: (
         renderType: RenderType,

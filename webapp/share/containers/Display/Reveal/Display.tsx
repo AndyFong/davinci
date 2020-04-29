@@ -44,7 +44,10 @@ const Display: React.FC<IDisplayProps> = (props) => {
 
   const layerListContextValue: LayerListContextValue = {
     currentDisplayWidgets: widgets,
-    getWidgetViewModel: (_, widgetId: number) => widgets[widgetId].model,
+    getWidgetView: (_, widgetId: number) => {
+      const { model, variable } = widgets[widgetId]
+      return { model, variable }
+    },
     getChartData: (
       renderType,
       slideNumber,

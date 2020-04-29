@@ -113,10 +113,10 @@ const SlideLayerList: React.FC = (props) => {
     dispatch(DisplayActions.selectLayer(layerId, selected, exclusive))
   }, [])
 
-  const getWidgetViewModel = useCallback(
+  const getWidgetView = useCallback(
     (viewId: number) => {
-      const viewModel = formedViews[viewId].model
-      return viewModel
+      const view = formedViews[viewId]
+      return view
     },
     [formedViews]
   )
@@ -157,7 +157,7 @@ const SlideLayerList: React.FC = (props) => {
       onDrag,
       onSelectionChange,
       onResize,
-      getWidgetViewModel,
+      getWidgetView,
       getChartData
     }),
     [
@@ -166,7 +166,7 @@ const SlideLayerList: React.FC = (props) => {
       onDrag,
       onSelectionChange,
       onResize,
-      getWidgetViewModel,
+      getWidgetView,
       getChartData
     ]
   )
