@@ -18,12 +18,10 @@
  * >>
  */
 
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { createStructuredSelector } from 'reselect'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  makeSelectDownloadList
-} from 'containers/App/selectors'
+import { makeSelectDownloadList } from 'containers/App/selectors'
 import {
   makeSelectPortals,
   makeSelectCurrentPortal,
@@ -40,24 +38,14 @@ import { VizActions } from './actions'
 import { Route } from 'react-router-dom'
 import { RouteComponentWithParams } from 'utils/types'
 
-import {
-  Layout,
-  Result,
-  PageHeader,
-  Tree,
-  Icon,
-  Button,
-  Menu,
-  Dropdown
-} from 'antd'
-const { Header, Sider, Content } = Layout
-const { DirectoryTree } = Tree
+import { Layout, PageHeader } from 'antd'
 import SplitPane from 'components/SplitPane'
 import DownloadList from 'components/DownloadList'
-import useDashboardConfigMenu from './hooks/dashboardConfigMenu'
 import { Grid } from 'containers/Dashboard/Loadable'
-import useDashboardTreeNodes from './hooks/dashboardTreeNodes'
-import { AntTreeNodeMouseEvent } from 'antd/lib/tree'
+
+import EmptyPortal from './components/Portal/EmptyPortal'
+import DashboardTree from './components/Portal/DashboardTree'
+import PortalToolbar from './components/Portal/PortalToolbar'
 
 const mapStateToProps = createStructuredSelector({
   downloadList: makeSelectDownloadList(),
@@ -101,34 +89,6 @@ const VizPortal: React.FC<IVizPortalProps> = (props) => {
   const onLoadDownloadList = useCallback(() => dispatch(loadDownloadList()), [])
   const onDownloadFile = useCallback((id) => dispatch(downloadFile(id)), [])
 
-  const [dashboardTreeNodes, firstDashboardKey] = useDashboardTreeNodes(currentDashboards)
-  const [dashboardMenuVisible, setDashboardMenuVisible] = useState(false)
-  const [dashboardMenuStyle, setDashboardMenuStyle] = useState({})
-  const dashboardConfigMenu = useDashboardConfigMenu(dashboardMenuStyle)
-
-  const closeDashboardMenu = useCallback(() => {
-    setDashboardMenuVisible(false)
-  }, [])
-
-  useEffect(() => {
-    document.addEventListener('click', closeDashboardMenu, false)
-    return () => {
-      document.removeEventListener('click', closeDashboardMenu, false)
-    }
-  }, [])
-
-  const showDashboardContextMenu = useCallback((options: AntTreeNodeMouseEvent) => {
-    const { node, event } = options
-    const { pageX, pageY } = event
-    const menuStyle: React.CSSProperties = {
-      position: 'absolute',
-      left: pageX,
-      top: pageY
-    }
-    setDashboardMenuStyle(menuStyle)
-    setDashboardMenuVisible(true)
-  }, [])
-
   return (
     <Layout>
       <PageHeader
@@ -144,54 +104,23 @@ const VizPortal: React.FC<IVizPortalProps> = (props) => {
           />
         }
       />
-      {dashboardMenuVisible && dashboardConfigMenu}
       {Array.isArray(currentDashboards) &&
         (currentDashboards.length ? (
           <SplitPane
             spliter
             className="ant-layout-content"
             type="horizontal"
-            initialSize={150}
-            minSize={150}
+            initialSize={250}
+            minSize={250}
           >
-            <DirectoryTree
-              defaultExpandAll
-              blockNode
-              defaultSelectedKeys={firstDashboardKey}
-              onRightClick={showDashboardContextMenu}
-            >
-              {dashboardTreeNodes}
-            </DirectoryTree>
+            <DashboardTree nodes={currentDashboards} toolbar={<PortalToolbar />} />
             <Route
               path="/project/:projectId/portal/:portalId/dashboard/:dashboardId"
               component={Grid}
             />
           </SplitPane>
         ) : (
-          <Content
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <Result
-              icon={<img src={require('assets/images/noDashboard.png')} />}
-              extra={
-                <p>
-                  请
-                  <Button size="small" type="link">
-                    创建文件夹
-                  </Button>
-                  或
-                  <Button size="small" type="link">
-                    创建 Dashboard
-                  </Button>
-                </p>
-              }
-            />
-          </Content>
+          <EmptyPortal />
         ))}
     </Layout>
   )
