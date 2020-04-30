@@ -30,7 +30,7 @@ const FormItem = Form.Item
 const { Option } = Select
 import MailTag from './MailTag'
 
-import { FormComponentProps } from 'antd/lib/form'
+import { WrappedFormUtils, FormComponentProps } from 'antd/lib/form/Form'
 import { IScheduleMailConfig, IUserInfo } from './types'
 import {
   FormItemStyle,
@@ -49,10 +49,10 @@ interface IScheduleMailConfigProps
   mailList: IUserInfo[]
 }
 
-export const ScheduleMailConfig: React.FC<IScheduleMailConfigProps> = (
-  props,
-  ref
-) => {
+export const ScheduleMailConfig: React.ForwardRefRenderFunction<
+  WrappedFormUtils<IScheduleMailConfig>,
+  IScheduleMailConfigProps
+> = (props, ref) => {
   const { form, config, loading, mailList, onLoadMailList } = props
   const { getFieldDecorator } = form
   const [showBcc, setShowBcc] = useState(false)
@@ -67,22 +67,16 @@ export const ScheduleMailConfig: React.FC<IScheduleMailConfigProps> = (
     </span>
   )
 
-  const resetMailList = useCallback(
-    () => {
-      onLoadMailList('')
-    },
-    [onLoadMailList]
-  )
+  const resetMailList = useCallback(() => {
+    onLoadMailList('')
+  }, [onLoadMailList])
 
-  useEffect(
-    () => {
-      if (config.bcc) {
-        setShowBcc(true)
-      }
-      form.setFieldsValue({ content: config.content || DefaultEmailContent })
-    },
-    [config]
-  )
+  useEffect(() => {
+    if (config.bcc) {
+      setShowBcc(true)
+    }
+    form.setFieldsValue({ content: config.content || DefaultEmailContent })
+  }, [config])
 
   const checkContentMaxLength = (
     _,
@@ -96,7 +90,7 @@ export const ScheduleMailConfig: React.FC<IScheduleMailConfigProps> = (
     callback()
   }
 
-  useImperativeHandle(ref, () => ({ form }))
+  useImperativeHandle(ref, () => form)
 
   return (
     <Form>
@@ -186,9 +180,7 @@ export const ScheduleMailConfig: React.FC<IScheduleMailConfigProps> = (
               }
             ],
             initialValue: config.content
-          })(
-            <RichText />
-          )
+          })(<RichText />)
         )}
       </FormItem>
     </Form>

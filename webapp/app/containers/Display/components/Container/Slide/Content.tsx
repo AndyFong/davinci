@@ -23,7 +23,7 @@ import React, { useContext, useMemo, PropsWithChildren } from 'react'
 import { ContainerContext } from '../ContainerContext'
 import { SlideContext } from './SlideContext'
 
-const SlideContent: React.RefForwardingComponent<
+const SlideContent: React.ForwardRefRenderFunction<
   HTMLDivElement,
   PropsWithChildren<{}>
 > = (props, ref) => {

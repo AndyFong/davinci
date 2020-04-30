@@ -33,7 +33,7 @@ const { TextArea } = Input
 const { Option } = Select
 const { RangePicker } = DatePicker
 
-import { FormComponentProps } from 'antd/lib/form'
+import { FormComponentProps, WrappedFormUtils } from 'antd/lib/form/Form'
 import {
   SchedulePeriodUnit,
   ISchedule,
@@ -142,10 +142,10 @@ const computePeriodUnit = (cronExpression: string) => {
   return periodUnit
 }
 
-export const ScheduleBaseConfig: React.FC<IScheduleBaseConfigProps> = (
-  props,
-  ref
-) => {
+export const ScheduleBaseConfig: React.ForwardRefRenderFunction<
+  WrappedFormUtils,
+  IScheduleBaseConfigProps
+> = (props, ref) => {
   const { form, schedule, loading, onCheckUniqueName } = props
 
   const checkNameUnique = useCallback(
@@ -171,42 +171,36 @@ export const ScheduleBaseConfig: React.FC<IScheduleBaseConfigProps> = (
     SchedulePeriodUnit
   >(computePeriodUnit(cronExpression))
 
-  useEffect(
-    () => {
-      const periodUnit = computePeriodUnit(cronExpression)
-      setCurrentPeriodUnit(periodUnit)
-    },
-    [cronExpression]
-  )
+  useEffect(() => {
+    const periodUnit = computePeriodUnit(cronExpression)
+    setCurrentPeriodUnit(periodUnit)
+  }, [cronExpression])
 
   let { minute, hour, day, month, weekDay } = useMemo<
     Partial<ScheduleBaseFormProps>
-  >(
-    () => {
-      const partitions = cronExpression.split(' ')
-      let minute =
-        form.getFieldValue('minute') ||
-        +(partitions[1].includes('/')
-          ? partitions[1].slice(2) // slice(2) to remove */
-          : partitions[1])
-      // min minute duration is 10
-      if (currentPeriodUnit === 'Minute' && minute < 10) {
-        minute = 10
-        form.setFieldsValue({ minute })
-      }
-      const hour = +partitions[2] || 0
-      const day = +partitions[3] || 1
-      const month = +partitions[4] || 1
-      const weekDay = +partitions[5] || 1
-      return { minute, hour, day, month, weekDay }
-    },
-    [cronExpression, currentPeriodUnit]
-  )
+  >(() => {
+    const partitions = cronExpression.split(' ')
+    let minute =
+      form.getFieldValue('minute') ||
+      +(partitions[1].includes('/')
+        ? partitions[1].slice(2) // slice(2) to remove */
+        : partitions[1])
+    // min minute duration is 10
+    if (currentPeriodUnit === 'Minute' && minute < 10) {
+      minute = 10
+      form.setFieldsValue({ minute })
+    }
+    const hour = +partitions[2] || 0
+    const day = +partitions[3] || 1
+    const month = +partitions[4] || 1
+    const weekDay = +partitions[5] || 1
+    return { minute, hour, day, month, weekDay }
+  }, [cronExpression, currentPeriodUnit])
 
   const { getFieldDecorator } = form
   const { startDate, endDate } = schedule
 
-  useImperativeHandle(ref, () => ({ form }))
+  useImperativeHandle(ref, () => form)
 
   return (
     <Form>

@@ -59,7 +59,8 @@
     "antd/moment": "2.24.0"
   },
   "peerDependencies": {
-    "moment": "2.24.0"
+    "moment": "2.24.0",
+    "@types/react": "16.9.34"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.3",
@@ -78,7 +79,7 @@
     "escape-html": "^1.0.3",
     "express": "4.16.4",
     "history": "4.9.0",
-    "hoist-non-react-statics": "3.3.0",
+    "hoist-non-react-statics": "3.3.1",
     "html2canvas": "^1.0.0-rc.5",
     "immer": "^4.0.2",
     "immutable": "^4.0.0-rc.12",
@@ -89,7 +90,6 @@
     "memoize-one": "^5.0.0",
     "minimist": "1.2.3",
     "prop-types": "15.6.2",
-    "quill-image-resize-module": "^3.0.0",
     "react": "16.8.6",
     "react-ace": "^8.1.0",
     "react-color": "^2.17.3",
@@ -137,9 +137,9 @@
     "@types/classnames": "^2.2.9",
     "@types/codemirror": "^0.0.80",
     "@types/echarts": "4.4.1",
+    "@types/hoist-non-react-statics": "3.3.1",
     "@types/lodash": "^4.14.147",
     "@types/memoize-one": "^4.1.0",
-    "@types/react": "16.9.11",
     "@types/react-color": "^3.0.1",
     "@types/react-dom": "16.9.4",
     "@types/react-grid-layout": "^0.16.7",

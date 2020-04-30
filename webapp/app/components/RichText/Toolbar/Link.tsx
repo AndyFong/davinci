@@ -55,7 +55,9 @@ const Link: React.FC = () => {
   return (
     <Popover
       visible={visible}
-      content={<LinkFormWrapper ref={form} onSave={insertLink} />}
+      content={
+        <LinkFormWrapper wrappedComponentRef={form} onSave={insertLink} />
+      }
     >
       <Icon
         type="link"
@@ -72,7 +74,10 @@ interface ILinkFormProps extends FormComponentProps {
   onSave: (values: { text: string; href: string }) => void
 }
 
-const LinkForm: React.FC<ILinkFormProps> = (props, ref) => {
+const LinkForm: React.ForwardRefRenderFunction<
+  WrappedFormUtils,
+  ILinkFormProps
+> = (props, ref) => {
   const { form, onSave } = props
   const { getFieldDecorator } = form
 
@@ -85,7 +90,7 @@ const LinkForm: React.FC<ILinkFormProps> = (props, ref) => {
     })
   }, [])
 
-  React.useImperativeHandle(ref, () => ({ form }))
+  React.useImperativeHandle(ref, () => form)
 
   return (
     <Form>
@@ -115,5 +120,5 @@ const LinkForm: React.FC<ILinkFormProps> = (props, ref) => {
 }
 
 const LinkFormWrapper = Form.create<ILinkFormProps>()(
-  React.forwardRef<WrappedFormUtils>(LinkForm)
+  React.forwardRef(LinkForm)
 )

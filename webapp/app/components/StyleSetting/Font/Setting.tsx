@@ -15,9 +15,13 @@ interface IFontSettingProps {
   onChange?: (setting: IFontSetting, pathPrefix?: string) => void
 }
 
-const FontSetting: React.FC<IFontSettingProps> = (props, ref) => {
+const FontSetting: React.RefForwardingComponent<
+  HTMLDivElement,
+  IFontSettingProps
+> = (props, ref) => {
   const { value, size: containerSize, pathPrefix, onChange } = props
-  const { fontFamily, fontStyle, fontSize, fontWeight, fontColor } = value || EmptyFontSetting
+  const { fontFamily, fontStyle, fontSize, fontWeight, fontColor } =
+    value || EmptyFontSetting
 
   const [family, setFamily] = useState(fontFamily)
   const [style, setStyle] = useState(fontStyle)
@@ -29,7 +33,14 @@ const FontSetting: React.FC<IFontSettingProps> = (props, ref) => {
     (changedValue: Partial<IFontSetting>) => {
       if (onChange) {
         onChange(
-          { fontFamily, fontStyle, fontSize, fontWeight, fontColor, ...changedValue },
+          {
+            fontFamily,
+            fontStyle,
+            fontSize,
+            fontWeight,
+            fontColor,
+            ...changedValue
+          },
           pathPrefix
         )
       }

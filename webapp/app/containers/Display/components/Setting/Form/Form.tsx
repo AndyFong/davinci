@@ -22,7 +22,7 @@ import React, { useImperativeHandle, forwardRef } from 'react'
 import debounce from 'lodash/debounce'
 
 import { Form } from 'antd'
-import { FormComponentProps } from 'antd/lib/form'
+import { FormComponentProps, WrappedFormUtils } from 'antd/lib/form/Form'
 import ItemGroup from './ItemGroup'
 
 import { SlideLayerSetting } from './types'
@@ -41,14 +41,19 @@ interface ISettingFormProps extends FormComponentProps {
   ) => void
 }
 
-const SettingForm: React.FC<ISettingFormProps> = (props, ref) => {
+const SettingForm: React.ForwardRefRenderFunction<
+  WrappedFormUtils,
+  ISettingFormProps
+> = (props, ref) => {
   const { form, setting, slideId, layerId } = props
 
   useImperativeHandle(ref, () => form)
 
   return (
     <Form className="display-setting-form" labelAlign="left">
-      <SlideSettingContext.Provider value={{ form, slideId, layerId, size: 'small' }}>
+      <SlideSettingContext.Provider
+        value={{ form, slideId, layerId, size: 'small' }}
+      >
         {setting.params.map((param) => (
           <ItemGroup key={param.name} param={param} />
         ))}

@@ -1,6 +1,6 @@
 import React, {
   useCallback,
-  RefForwardingComponent,
+  ForwardRefRenderFunction,
   PropsWithChildren,
   useMemo
 } from 'react'
@@ -24,7 +24,7 @@ interface IColorPickerProps {
   onChange?: (value: string | [number, number, number, number]) => void
 }
 
-const ColorPicker: RefForwardingComponent<
+const ColorPicker: ForwardRefRenderFunction<
   Popover,
   PropsWithChildren<IColorPickerProps>
 > = (props, ref) => {

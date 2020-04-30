@@ -27,12 +27,16 @@ interface IBackgroundSettingProps {
   onChange?: (color: string) => void
 }
 
-const BackgroundSetting: React.FC<IBackgroundSettingProps> = (props) => {
+const BackgroundSetting: React.RefForwardingComponent<
+  {},
+  IBackgroundSettingProps
+> = (props) => {
   const { value, size, onChange } = props
   const [color, setColor] = useState(value)
 
   const triggerChange = useCallback(
     (changedValue: string) => {
+      setColor(changedValue)
       if (onChange) {
         onChange(changedValue)
       }
@@ -44,10 +48,7 @@ const BackgroundSetting: React.FC<IBackgroundSettingProps> = (props) => {
     <ColorPicker
       value={color}
       size={size}
-      onChange={(val) => {
-        setColor(val)
-        triggerChange(val)
-      }}
+      onChange={triggerChange}
     />
   )
 }

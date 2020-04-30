@@ -18,12 +18,13 @@
  * >>
  */
 
-import React, { useState } from 'react'
+import React, { useImperativeHandle } from 'react'
 import { Form, Row, Col, Select, InputNumber } from 'antd'
 const FormItem = Form.Item
 const { Option } = Select
 
 import { FormItemProps, FormComponentProps } from 'antd/lib/form'
+import { WrappedFormUtils } from 'antd/lib/form/Form'
 
 export type PollingSetting = {
   polling: 'true' | 'false'
@@ -38,12 +39,16 @@ const FormItemStyle: Partial<FormItemProps> = {
 type PollingConfigProps = Partial<PollingSetting> &
   FormComponentProps<PollingSetting>
 
-const PollingConfig: React.FC<PollingConfigProps> = (props) => {
+const PollingConfig: React.ForwardRefRenderFunction<
+  WrappedFormUtils,
+  PollingConfigProps
+> = (props, ref) => {
   const { form, polling, frequency } = props
   const { getFieldDecorator } = form
 
   const currentPolling = form.getFieldValue('polling')
 
+  useImperativeHandle(ref, () => form)
   return (
     <Form>
       <Row>
@@ -79,4 +84,6 @@ const PollingConfig: React.FC<PollingConfigProps> = (props) => {
   )
 }
 
-export default Form.create<PollingConfigProps>()(PollingConfig)
+export default Form.create<PollingConfigProps>()(
+  React.forwardRef(PollingConfig)
+)

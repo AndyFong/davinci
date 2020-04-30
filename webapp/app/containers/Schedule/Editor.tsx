@@ -49,7 +49,7 @@ import vizSaga from 'containers/Viz/sagas'
 import dashboardSaga from 'containers/Dashboard/sagas'
 
 import { Row, Col, Card, Button, Icon, Tooltip, message } from 'antd'
-import { FormComponentProps } from 'antd/lib/form/Form'
+import { WrappedFormUtils } from 'antd/lib/form/Form'
 
 import ScheduleBaseConfig, {
   ScheduleBaseFormProps
@@ -226,24 +226,24 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = (props) => {
     setLocalContentList([...contentList])
   }, [contentList])
 
-  let baseConfigForm: FormComponentProps<ScheduleBaseFormProps> = null
-  let mailConfigForm: FormComponentProps<IScheduleMailConfig> = null
+  let baseConfigFormRef = React.createRef<WrappedFormUtils>()
+  let mailConfigFormRef = React.createRef<WrappedFormUtils>()
 
   const saveSchedule = () => {
     if (!localContentList.length) {
       message.error('请勾选发送内容')
       return
     }
-    baseConfigForm.form.validateFieldsAndScroll((err1, value1) => {
+    baseConfigFormRef.current.validateFieldsAndScroll((err1, value1) => {
       if (err1) {
         return
       }
       const cronExpression = getCronExpressionByPartition(value1)
-      const [startDate, endDate] = baseConfigForm.form.getFieldValue(
+      const [startDate, endDate] = baseConfigFormRef.current.getFieldValue(
         'dateRange'
       ) as ScheduleBaseFormProps['dateRange']
       delete value1.dateRange
-      mailConfigForm.form.validateFieldsAndScroll((err2, value2) => {
+      mailConfigFormRef.current.validateFieldsAndScroll((err2, value2) => {
         if (err2) {
           return
         }
@@ -297,9 +297,7 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = (props) => {
             <Col span={12}>
               <Card title="基本设置" size="small">
                 <ScheduleBaseConfig
-                  wrappedComponentRef={(inst) => {
-                    baseConfigForm = inst
-                  }}
+                  wrappedComponentRef={baseConfigFormRef}
                   schedule={editingSchedule}
                   loading={loading.schedule}
                   onCheckUniqueName={onCheckUniqueName}
@@ -307,9 +305,7 @@ const ScheduleEditor: React.FC<ScheduleEditorProps> = (props) => {
               </Card>
               <Card title="邮件设置" size="small" style={{ marginTop: 8 }}>
                 <ScheduleMailConfig
-                  wrappedComponentRef={(inst) => {
-                    mailConfigForm = inst
-                  }}
+                  wrappedComponentRef={mailConfigFormRef}
                   config={config}
                   loading={loading.schedule}
                   mailList={suggestMails}

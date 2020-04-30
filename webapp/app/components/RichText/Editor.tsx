@@ -27,7 +27,7 @@ import { withHtml } from './decorators'
 import { parseHtml } from './util'
 
 import Toolbar from './Toolbar'
-import { Element, withElements, TextStyles, ElementTypes } from './Element'
+import { Element, withElements } from './Element'
 import { Leaf } from './Leaf'
 
 import './RichText.less'
@@ -41,7 +41,10 @@ interface IEditorProps {
   onChange?: (newVal: Node[]) => void
 }
 
-const Editor: React.FC<IEditorProps> = (props, ref) => {
+const Editor: React.ForwardRefRenderFunction<{}, IEditorProps> = (
+  props,
+  ref
+) => {
   const { value, className, readOnly, toolbar, onFormatText, onChange } = props
   const initialValue = useMemo(() => {
     let parsedValue: Node[]
@@ -84,11 +87,7 @@ const Editor: React.FC<IEditorProps> = (props, ref) => {
   useImperativeHandle(ref, () => ({}))
   return (
     <div className={cls}>
-      <Slate
-        editor={editor}
-        value={initialValue}
-        onChange={onChange}
-      >
+      <Slate editor={editor} value={initialValue} onChange={onChange}>
         {toolbar === false ? null : toolbar || <Toolbar.Toolbar />}
         <Editable
           renderElement={Element}

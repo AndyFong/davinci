@@ -221,7 +221,7 @@ export function* getDatasourcesInfo (action: SourceActionType) {
   }
 }
 
-export default function* rootSourceSaga (): IterableIterator<any> {
+export default function* rootSourceSaga () {
   yield all([
     takeLatest(ActionTypes.LOAD_SOURCES, getSources),
     takeEvery(ActionTypes.LOAD_SOURCE_DETAIL, getSourceDetail),

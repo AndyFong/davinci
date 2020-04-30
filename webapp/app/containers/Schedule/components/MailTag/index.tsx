@@ -50,7 +50,7 @@ interface IMailTagProps {
 // http://emailregex.com/
 const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-const MailTag: React.FC<IMailTagProps> = (props, ref) => {
+const MailTag: React.ForwardRefRenderFunction<{}, IMailTagProps> = (props, ref) => {
   const {
     dataSource,
     value,

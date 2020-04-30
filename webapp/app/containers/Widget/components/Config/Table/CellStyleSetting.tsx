@@ -19,10 +19,10 @@
  */
 
 import React, { forwardRef, useImperativeHandle } from 'react'
-import pick from 'lodash/pick'
+
 import { Form } from 'antd'
 const FormItem = Form.Item
-import { FormComponentProps } from 'antd/lib/form'
+import { FormComponentProps, WrappedFormUtils } from 'antd/lib/form/Form'
 
 import {
   BackgroundSetting,
@@ -37,7 +37,10 @@ interface ICellStyleSettingProps extends FormComponentProps {
   style: ITableCellStyle
 }
 
-const CellStyleSetting: React.FC<ICellStyleSettingProps> = (props, ref) => {
+const CellStyleSetting: React.ForwardRefRenderFunction<
+  WrappedFormUtils,
+  ICellStyleSettingProps
+> = (props, ref) => {
   const { form, style } = props
   const { getFieldDecorator } = form
   const {
@@ -57,7 +60,7 @@ const CellStyleSetting: React.FC<ICellStyleSettingProps> = (props, ref) => {
     fontColor
   }
 
-  useImperativeHandle(ref, () => ({ form }))
+  useImperativeHandle(ref, () => form)
 
   return (
     <Form>

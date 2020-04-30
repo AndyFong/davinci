@@ -21,7 +21,7 @@
 import React, {
   useCallback,
   useState,
-  RefForwardingComponent,
+  ForwardRefRenderFunction,
   PropsWithChildren
 } from 'react'
 import { Upload as AntUpload, Spin } from 'antd'
@@ -33,7 +33,7 @@ interface IUploadProps {
   onChange?: (path: string) => void
 }
 
-const Upload: RefForwardingComponent<
+const Upload: ForwardRefRenderFunction<
   AntUpload,
   PropsWithChildren<IUploadProps>
 > = (props, ref) => {
